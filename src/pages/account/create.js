@@ -39,6 +39,7 @@ export const AccountCreate = (props) => {
         validate={validateAccountCreation}
         warnWhenUnsavedChanges
         toolbar={<AccountCreateToolbar />}
+        redirect="show"
       >
         <SelectInput
           source="userType"

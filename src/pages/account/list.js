@@ -1,5 +1,11 @@
 import React from "react";
-import { List, Datagrid, TextField, EditButton } from "react-admin";
+import {
+  List,
+  Datagrid,
+  TextField,
+  EditButton,
+  FunctionField,
+} from "react-admin";
 import { ListActions, Filters } from "../../components";
 
 export const AccountList = (props) => {
@@ -16,6 +22,12 @@ export const AccountList = (props) => {
         <TextField source="displayName" label="Tên" />
         <TextField source="email" label="Email" />
         <TextField source="userType" label="Loại tài khoản" />
+        <FunctionField
+          label="Loại tài khoản"
+          render={(record) =>
+            record.userType === "MINISTRY" ? "Bộ" : "Chủ đầu tư"
+          }
+        />
         <EditButton label="Sửa" />
       </Datagrid>
     </List>

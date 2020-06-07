@@ -99,7 +99,7 @@ export const ProjectCreate = (props) => {
         <RichTextInput source="desc" label="Mô tả" />
         <BooleanInput
           label="Có dự án con?"
-          source="hasChildProjects"
+          source="hasChildProject"
           onChange={(event) => setHasChild(event)}
         />
         {hasChild ? (
@@ -117,24 +117,25 @@ export const ProjectCreate = (props) => {
               />
               <ReferenceInput
                 label="Chủ đầu tư"
-                source="_id"
+                source="investor"
                 reference="account"
                 validate={required("Bạn chưa nhập chủ đầu tư!")}
                 fullWidth
               >
-                <SelectInput optionText="displayName" />
+                <SelectInput optionText="displayName" optionValue="_id" />
               </ReferenceInput>
+              <TextInput source="desc" label="Mô tả" fullWidth />
             </SimpleFormIterator>
           </ArrayInput>
         ) : (
           <ReferenceInput
             label="Chủ đầu tư"
-            source="_id"
+            source="investor"
             reference="account"
             fullWidth
             validate={required("Bạn chưa nhập chủ đầu tư!")}
           >
-            <SelectInput optionText="displayName" />
+            <SelectInput optionText="displayName" optionValue="_id" />
           </ReferenceInput>
         )}
       </SimpleForm>

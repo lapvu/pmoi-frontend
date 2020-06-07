@@ -1,6 +1,6 @@
 import React from "react";
 import { Admin, Resource, fetchUtils } from "react-admin";
-import { crudProvider } from "./data-provider";
+import jsonServerProvider from "./data-provider";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import { authProvider } from "./auth";
@@ -15,6 +15,7 @@ import {
   AccountEdit,
   AccountList,
   ShowAccount,
+  ShowProject,
 } from "./pages";
 import { LogoutButton, MyLayout } from "./components";
 import { Route } from "react-router-dom";
@@ -27,7 +28,7 @@ const httpClient = (url, options = {}) => {
   options.headers.set("Authorization", `Bearer ${token}`);
   return fetchUtils.fetchJson(url, options);
 };
-const dataProvider = crudProvider("http://localhost", httpClient);
+const dataProvider = jsonServerProvider("http://localhost", httpClient);
 function App() {
   return (
     <Admin
@@ -60,6 +61,7 @@ function App() {
             list={ProjectList}
             create={ProjectCreate}
             edit={ProjectEdit}
+            show={ShowProject}
           />
         ) : null,
       ]}

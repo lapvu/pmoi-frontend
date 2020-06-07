@@ -1,10 +1,22 @@
 import React from "react";
-import { Show, SimpleShowLayout, TextField, DateField } from "react-admin";
+import {
+  Show,
+  SimpleShowLayout,
+  TextField,
+  DateField,
+  FunctionField,
+  
+} from "react-admin";
 export const ShowAccount = (props) => {
   return (
     <Show {...props} title="Xem">
       <SimpleShowLayout>
-        <TextField source="userType" label="Loại tài khoản" />
+        <FunctionField
+          label="Loại tài khoản"
+          render={(record) =>
+            record.userType === "MINISTRY" ? "Bộ" : "Chủ đầu tư"
+          }
+        />
         <TextField source="username" label="Tên tài khoản" />
         <TextField source="displayName" label="Tên hiển thị" />
         <TextField source="email" label="Email" />

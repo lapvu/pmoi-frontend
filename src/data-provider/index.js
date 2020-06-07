@@ -1,174 +1,118 @@
-import * as crudRequest from "@nestjsx/crud-request";
-import * as reactAdmin from "react-admin";
+import { stringify } from "query-string";
+import { fetchUtils } from "ra-core";
 
-export const crudProvider = (
-  apiUrl,
-  httpClient = reactAdmin.fetchUtils.fetchJson
-) => {
-  const composeFilter = (paramsFilter) => {
-    if (
-      paramsFilter === "" ||
-      (typeof paramsFilter.q !== "undefined" && paramsFilter.q === "")
-    ) {
-      paramsFilter = {};
-    }
+/**
 
-    const flatFilter = reactAdmin.fetchUtils.flattenObject(paramsFilter);
-    const filter = Object.keys(flatFilter).map((key) => {
-      const splitKey = key.split("||");
-      const ops = splitKey[1] ? splitKey[1] : "cont";
-      let field = splitKey[0];
+ * getList          => GET http://my.api.url/posts?_sort=title&_order=ASC&_start=0&_end=24
+ * getOne           => GET http://my.api.url/posts/123
+ * getManyReference => GET http://my.api.url/posts?author_id=345
+ * getMany          => GET http://my.api.url/posts/123, GET http://my.api.url/posts/456, GET http://my.api.url/posts/789
+ * create           => POST http://my.api.url/posts/123
+ * update           => PUT http://my.api.url/posts/123
+ * updateMany       => PUT http://my.api.url/posts/123, PUT http://my.api.url/posts/456, PUT http://my.api.url/posts/789
+ * delete           => DELETE http://my.api.url/posts/123
+ */
+export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
+  getList: (resource, params) => {
+    const { page, perPage } = params.pagination;
+    const { field, order } = params.sort;
+    const query = {
+      ...fetchUtils.flattenObject(params.filter),
+      _sort: field,
+      _order: order,
+      _start: (page - 1) * perPage,
+      _end: page * perPage,
+    };
+    const url = `${apiUrl}/${resource}?${stringify(query)}`;
 
-      if (field.indexOf("_") === 0 && field.indexOf(".") > -1) {
-        field = field.split(/\.(.+)/)[1];
-      }
-      return { field, operator: ops, value: flatFilter[key] };
+    return httpClient(url).then(({ headers, json }) => {
+      return {
+        data: json.data.map((e, i) => ({
+          id: e._id,
+          ...e,
+        })),
+        total: json.total,
+      };
     });
-    return filter;
-  };
+  },
 
-  const convertDataRequestToHTTP = (type, resource, params) => {
-    let url = "";
-    const options = {};
-    switch (type) {
-      case reactAdmin.GET_LIST: {
-        const { page, perPage } = params.pagination;
-        const query = crudRequest.RequestQueryBuilder.create({
-          filter: composeFilter(params.filter),
+  getOne: (resource, params) =>
+    httpClient(`${apiUrl}/${resource}/${params.id}`).then(({ json }) => ({
+      data: {
+        id: json.data._id,
+        ...json.data,
+      },
+    })),
+
+  getMany: (resource, params) => {
+    console.log(params);
+    const query = {
+      id: params.ids.map((e, i) => (typeof e === "object" ? e._id : e)),
+    };
+    const url = `${apiUrl}/${resource}?${stringify(query, {
+      arrayFormat: "comma",
+    })}`;
+    return httpClient(url).then(({ json }) => ({ data: json.data }));
+  },
+
+  getManyReference: (resource, params) => {
+    const { page, perPage } = params.pagination;
+    const { field, order } = params.sort;
+    const query = {
+      ...fetchUtils.flattenObject(params.filter),
+      [params.target]: params.id,
+      _sort: field,
+      _order: order,
+      _start: (page - 1) * perPage,
+      _end: page * perPage,
+    };
+    const url = `${apiUrl}/${resource}?${stringify(query)}`;
+
+    return httpClient(url).then(({ headers, json }) => {
+      return {
+        data: json.data.map((e, i) => ({ id: e._id, ...e })),
+        total: json.total,
+      };
+    });
+  },
+
+  update: (resource, params) =>
+    httpClient(`${apiUrl}/${resource}/${params.id}`, {
+      method: "PUT",
+      body: JSON.stringify(params.data),
+    }).then(({ json }) => ({ data: json })),
+
+  // json-server doesn't handle filters on UPDATE route, so we fallback to calling UPDATE n times instead
+  updateMany: (resource, params) =>
+    Promise.all(
+      params.ids.map((id) =>
+        httpClient(`${apiUrl}/${resource}/${id}`, {
+          method: "PUT",
+          body: JSON.stringify(params.data),
         })
-          .setLimit(perPage)
-          .setPage(page)
-          .sortBy(params.sort)
-          .setOffset((page - 1) * perPage)
-          .query();
+      )
+    ).then((responses) => ({ data: responses.map(({ json }) => json._id) })),
 
-        url = `${apiUrl}/${resource}?${query}`;
+  create: (resource, params) =>
+    httpClient(`${apiUrl}/${resource}`, {
+      method: "POST",
+      body: JSON.stringify(params.data),
+    }).then(({ json }) => ({
+      data: { ...params.data, id: json._id },
+    })),
 
-        break;
-      }
-      case reactAdmin.GET_ONE: {
-        url = `${apiUrl}/${resource}/${params.id}`;
+  delete: (resource, params) =>
+    httpClient(`${apiUrl}/${resource}/${params.id}`, {
+      method: "DELETE",
+    }).then(({ json }) => ({ data: json })),
 
-        break;
-      }
-      case reactAdmin.GET_MANY: {
-        const query = crudRequest.RequestQueryBuilder.create()
-          .setFilter({
-            field: "id",
-            operator: crudRequest.CondOperator.IN,
-            value: `${params.ids}`,
-          })
-          .query();
-
-        url = `${apiUrl}/${resource}?${query}`;
-
-        break;
-      }
-      case reactAdmin.GET_MANY_REFERENCE: {
-        const { page, perPage } = params.pagination;
-        const filter = composeFilter(params.filter);
-
-        filter.push({
-          field: params.target,
-          operator: crudRequest.CondOperator.EQUALS,
-          value: params.id,
-        });
-
-        const query = crudRequest.RequestQueryBuilder.create({
-          filter,
+  // json-server doesn't handle filters on DELETE route, so we fallback to calling DELETE n times instead
+  deleteMany: (resource, params) =>
+    Promise.all(
+      params.ids.map((id) =>
+        httpClient(`${apiUrl}/${resource}/${id}`, {
+          method: "DELETE",
         })
-          .sortBy(params.sort)
-          .setLimit(perPage)
-          .setOffset((page - 1) * perPage)
-          .query();
-
-        url = `${apiUrl}/${resource}?${query}`;
-
-        break;
-      }
-      case reactAdmin.UPDATE: {
-        url = `${apiUrl}/${resource}/${params.id}`;
-        options.method = "PUT";
-        options.body = JSON.stringify(params.data);
-        break;
-      }
-      case reactAdmin.CREATE: {
-        url = `${apiUrl}/${resource}`;
-        options.method = "POST";
-        options.body = JSON.stringify(params.data);
-        break;
-      }
-      case reactAdmin.DELETE: {
-        url = `${apiUrl}/${resource}/${params.id}`;
-        options.method = "DELETE";
-        break;
-      }
-      default:
-        throw new Error(`Unsupported fetch action type ${type}`);
-    }
-    return { url, options };
-  };
-
-  const convertHTTPResponse = (response, type, resource, params) => {
-    const { json } = response;
-    switch (type) {
-      case reactAdmin.GET_LIST:
-        return {
-          data: json.data.map((e, i) => {
-            return {
-              id: e._id,
-              ...e,
-            };
-          }),
-          total: json.total,
-        };
-      case reactAdmin.GET_MANY_REFERENCE:
-        return {
-          data: json.data.map((e, i) => {
-            return {
-              id: e._id,
-              ...e,
-            };
-          }),
-          total: json.total,
-        };
-      case reactAdmin.CREATE:
-        return { data: { ...params.data, id: json._id } };
-      case reactAdmin.GET_ONE:
-        return { data: { id: json.data._id, ...json.data } };
-      default:
-        return { data: json };
-    }
-  };
-
-  return (type, resource, params) => {
-    if (type === reactAdmin.UPDATE_MANY) {
-      return Promise.all(
-        params.ids.map((id) =>
-          httpClient(`${apiUrl}/${resource}/${id}`, {
-            method: "PUT",
-            body: JSON.stringify(params.data),
-          })
-        )
-      ).then((responses) => ({
-        data: responses.map((response) => response.json),
-      }));
-    }
-    if (type === reactAdmin.DELETE_MANY) {
-      return Promise.all(
-        params.ids.map((id) =>
-          httpClient(`${apiUrl}/${resource}/${id}`, {
-            method: "DELETE",
-          })
-        )
-      ).then((responses) => ({
-        data: responses.map((response) => response.json),
-      }));
-    }
-
-    const { url, options } = convertDataRequestToHTTP(type, resource, params);
-    return httpClient(url, options).then((response) =>
-      convertHTTPResponse(response, type, resource, params)
-    );
-  };
-};
+      )
+    ).then((responses) => ({ data: responses.map(({ json }) => json.id) })),
+});

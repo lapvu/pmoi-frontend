@@ -7,27 +7,15 @@ import {
   email,
   SelectInput,
   NumberInput,
-  SaveButton,
-  Toolbar,
-  DeleteButton,
   FormDataConsumer,
 } from "react-admin";
-
-const AccountCreateToolbar = (props) => (
-  <Toolbar
-    {...props}
-    style={{ display: "flex", justifyContent: "space-between" }}
-  >
-    <SaveButton label="Sửa" redirect={false} submitOnEnter={false} />
-    <DeleteButton undoable={false} label="Xoá" />
-  </Toolbar>
-);
+import { EditToolbar } from "../../components";
 
 export const AccountEdit = (props) => {
   const [userType, setUserType] = useState("");
   return (
     <Edit {...props} title="Sửa">
-      <SimpleForm warnWhenUnsavedChanges toolbar={<AccountCreateToolbar />}>
+      <SimpleForm warnWhenUnsavedChanges toolbar={<EditToolbar />} redirect="show">
         <FormDataConsumer>
           {({ formData }) => (
             <>
