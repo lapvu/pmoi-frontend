@@ -1,7 +1,10 @@
-var crudRequest = require("@nestjsx/crud-request");
-var reactAdmin = require("react-admin");
+import * as crudRequest from "@nestjsx/crud-request";
+import * as reactAdmin from "react-admin";
 
-var index = (apiUrl, httpClient = reactAdmin.fetchUtils.fetchJson) => {
+export const crudProvider = (
+  apiUrl,
+  httpClient = reactAdmin.fetchUtils.fetchJson
+) => {
   const composeFilter = (paramsFilter) => {
     if (
       paramsFilter === "" ||
@@ -169,5 +172,3 @@ var index = (apiUrl, httpClient = reactAdmin.fetchUtils.fetchJson) => {
     );
   };
 };
-
-module.exports = index;

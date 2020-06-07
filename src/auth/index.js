@@ -2,7 +2,7 @@ import axios from "axios";
 export const authProvider = {
   login: ({ username, password }) => {
     return axios
-      .post("http://localhost:3001/auth/login", {
+      .post("https://pmoi-api.herokuapp.com/auth/login", {
         username,
         password,
       })

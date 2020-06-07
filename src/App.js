@@ -1,6 +1,6 @@
 import React from "react";
 import { Admin, Resource, fetchUtils } from "react-admin";
-import crudProvider from "./data-provider";
+import { crudProvider } from "./data-provider";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import { authProvider } from "./auth";
@@ -27,7 +27,7 @@ const httpClient = (url, options = {}) => {
   options.headers.set("Authorization", `Bearer ${token}`);
   return fetchUtils.fetchJson(url, options);
 };
-const dataProvider = crudProvider("http://localhost:3001", httpClient);
+const dataProvider = crudProvider("http://localhost", httpClient);
 function App() {
   return (
     <Admin
