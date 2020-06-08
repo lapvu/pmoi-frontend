@@ -21,7 +21,6 @@ export const AccountList = (props) => {
         <TextField source="username" label="Tên tài khoản" />
         <TextField source="displayName" label="Tên" />
         <TextField source="email" label="Email" />
-        <TextField source="userType" label="Loại tài khoản" />
         <FunctionField
           label="Loại tài khoản"
           render={(record) =>

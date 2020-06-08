@@ -28,7 +28,7 @@ const httpClient = (url, options = {}) => {
   options.headers.set("Authorization", `Bearer ${token}`);
   return fetchUtils.fetchJson(url, options);
 };
-const dataProvider = jsonServerProvider("http://localhost", httpClient);
+const dataProvider = jsonServerProvider("https://pmoi-api.herokuapp.com", httpClient);
 function App() {
   return (
     <Admin
