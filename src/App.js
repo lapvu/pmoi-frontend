@@ -2,6 +2,7 @@ import React from "react";
 import { Admin, Resource, fetchUtils } from "react-admin";
 import jsonServerProvider from "./data-provider";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
+import AccountBalance from "@material-ui/icons/AccountBalance";
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import { authProvider } from "./auth";
 import {
@@ -16,6 +17,11 @@ import {
   AccountList,
   ShowAccount,
   ShowProject,
+  ResourceList,
+  ShowResource,
+  ResourceCreate,
+  ResourceEdit,
+
 } from "./pages";
 import { LogoutButton, MyLayout } from "./components";
 import { Route } from "react-router-dom";
@@ -28,7 +34,7 @@ const httpClient = (url, options = {}) => {
   options.headers.set("Authorization", `Bearer ${token}`);
   return fetchUtils.fetchJson(url, options);
 };
-const dataProvider = jsonServerProvider("http://localhost", httpClient);
+const dataProvider = jsonServerProvider("https://pmoi-api.herokuapp.com", httpClient);
 function App() {
   return (
     <Admin
@@ -52,6 +58,16 @@ function App() {
             edit={AccountEdit}
             show={ShowAccount}
           />
+        ) : null,
+        permissions.includes("ADMIN") ? (<Resource
+          name="resources"
+          options={{ label: "Nguồn vốn" }}
+          icon={AccountBalance}
+          list={ResourceList}
+          create={ResourceCreate}
+          edit={ResourceEdit}
+          show={ShowResource}
+        />
         ) : null,
         permissions.includes("ADMIN") || permissions.includes("MINISTRY") ? (
           <Resource
