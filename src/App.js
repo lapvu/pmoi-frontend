@@ -4,6 +4,8 @@ import jsonServerProvider from "./data-provider";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import AccountBalance from "@material-ui/icons/AccountBalance";
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
+import CreditCard from "@material-ui/icons/CreditCard";
+import Assessment from "@material-ui/icons/Assessment";
 import { authProvider } from "./auth";
 import {
   Dashboard,
@@ -21,7 +23,12 @@ import {
   ShowResource,
   ResourceCreate,
   ResourceEdit,
-
+  ReportList,
+  ReportCreate,
+  // ShowReport,
+  // ReportEdit,
+  InvestmentList,
+  InvestmentCreate,
 } from "./pages";
 import { LogoutButton, MyLayout } from "./components";
 import { Route } from "react-router-dom";
@@ -67,6 +74,27 @@ function App() {
           create={ResourceCreate}
           edit={ResourceEdit}
           show={ShowResource}
+        />
+        ) : null,
+        permissions.includes("ADMIN") || permissions.includes("MINISTRY") ? (
+          <Resource
+            name="investment"
+            options={{ label: "Mức đầu tư" }}
+            icon={CreditCard}
+            list={InvestmentList}
+            create={InvestmentCreate}
+          // edit={ResourceEdit}
+          // show={ShowResource}
+          />
+        ) : null,
+        permissions.includes("ADMIN") ? (<Resource
+          name="report"
+          options={{ label: "Báo cáo" }}
+          icon={Assessment}
+          list={ReportList}
+          create={ReportCreate}
+        // edit={ReportEdit}
+        // show={ShowReport}
         />
         ) : null,
         permissions.includes("ADMIN") || permissions.includes("MINISTRY") ? (
