@@ -4,12 +4,9 @@ import { Admin, Resource, fetchUtils } from "react-admin";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import AccountBalance from "@material-ui/icons/AccountBalance";
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
-<<<<<<< HEAD
 
-=======
 import CreditCard from "@material-ui/icons/CreditCard";
 import Assessment from "@material-ui/icons/Assessment";
->>>>>>> cb8a84a9947d55eca1d830a1474c2a8bd2747f6e
 import { authProvider } from "./auth";
 import jsonServerProvider from "./data-provider";
 import {
@@ -28,19 +25,16 @@ import {
   ShowResource,
   ResourceCreate,
   ResourceEdit,
-<<<<<<< HEAD
   InvestorCreate,
   InvestorEdit,
   InvestorList,
   ShowInvestor,
-=======
   ReportList,
   ReportCreate,
   // ShowReport,
   // ReportEdit,
   InvestmentList,
   InvestmentCreate,
->>>>>>> cb8a84a9947d55eca1d830a1474c2a8bd2747f6e
 } from "./pages";
 import { LogoutButton, MyLayout } from "./components";
 import { Route } from "react-router-dom";
@@ -98,19 +92,20 @@ function App() {
             icon={CreditCard}
             list={InvestmentList}
             create={InvestmentCreate}
-          // edit={ResourceEdit}
-          // show={ShowResource}
+            // edit={ResourceEdit}
+            // show={ShowResource}
           />
         ) : null,
-        permissions.includes("ADMIN") ? (<Resource
-          name="report"
-          options={{ label: "Báo cáo" }}
-          icon={Assessment}
-          list={ReportList}
-          create={ReportCreate}
-        // edit={ReportEdit}
-        // show={ShowReport}
-        />
+        permissions.includes("ADMIN") ? (
+          <Resource
+            name="report"
+            options={{ label: "Báo cáo" }}
+            icon={Assessment}
+            list={ReportList}
+            create={ReportCreate}
+            // edit={ReportEdit}
+            // show={ShowReport}
+          />
         ) : null,
         permissions.includes("ADMIN") || permissions.includes("MINISTRY") ? (
           <Resource
