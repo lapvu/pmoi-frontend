@@ -25,12 +25,12 @@ const validateAccountCreation = (values) => {
 
 const AccountCreateToolbar = (props) => (
   <Toolbar {...props}>
-    <SaveButton label="Thêm" redirect={false} submitOnEnter={false} />
+    <SaveButton label="Thêm" redirect="show" submitOnEnter={false} />
   </Toolbar>
 );
 
 export const AccountCreate = (props) => {
-  const [userType, setUserType] = useState("");
+  const [accountType, setAccountType] = useState("");
 
   return (
     <Create {...props} title="Thêm mới tài khoản">
@@ -42,20 +42,20 @@ export const AccountCreate = (props) => {
         redirect="show"
       >
         <SelectInput
-          source="userType"
+          source="accountType"
           label="Loại tài khoản"
           fullWidth
           choices={[
             { id: "MINISTRY", name: "Bộ" },
             { id: "INVESTOR", name: "Chủ đầu tư" },
           ]}
-          onChange={(e) => setUserType(e.target.value)}
+          onChange={(e) => setAccountType(e.target.value)}
           validate={required("Bạn cần chọn loại tài khoản!")}
         />
-        {userType && (
+        {accountType === "INVESTOR" && (
           <TextInput
-            source="displayName"
-            label={userType === "INVESTOR" ? "Tên chủ đầu tư" : "Tên của bộ"}
+            source="investorName"
+            label={"Tên chủ đầu tư"}
             validate={required("Bạn chưa nhập tên!")}
             fullWidth
           />
@@ -88,13 +88,13 @@ export const AccountCreate = (props) => {
           validate={required("Bạn cần xác nhận lại mật khẩu!")}
         />
         <TextInput source="address" label="Địa chỉ" fullWidth />
-        {userType === "INVESTOR" && (
+        {accountType === "INVESTOR" && (
           <TextInput source="desc" label="Mô tả" fullWidth />
         )}
-        {userType === "INVESTOR" && (
+        {accountType === "INVESTOR" && (
           <TextInput source="website" label="Website" fullWidth />
         )}
-        {userType === "INVESTOR" && (
+        {accountType === "INVESTOR" && (
           <TextInput source="fax" label="Fax" fullWidth />
         )}
         <NumberInput source="phoneNumber" label="Số điện thoại" fullWidth />

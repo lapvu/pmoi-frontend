@@ -6,7 +6,7 @@ export const EditToolbar = (props) => (
     {...props}
     style={{ display: "flex", justifyContent: "space-between" }}
   >
-    <SaveButton label="Sửa" redirect={false} submitOnEnter={false} />
+    <SaveButton label="Sửa" submitOnEnter={false} />
     <DeleteButton undoable={false} label="Xoá" />
   </Toolbar>
 );

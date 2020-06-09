@@ -20,7 +20,7 @@ import { EditToolbar } from "../../components";
 export const ProjectEdit = (props) => {
   const [hasChild, setHasChild] = useState(false);
   return (
-    <Edit {...props}>
+    <Edit {...props} title="Sửa dự án" redirect="show">
       <SimpleForm
         warnWhenUnsavedChanges
         toolbar={<EditToolbar />}
@@ -129,7 +129,7 @@ export const ProjectEdit = (props) => {
                         variant="standard"
                       >
                         <SelectInput
-                          optionText="displayName"
+                          optionText="investorName"
                           optionValue="_id"
                           variant="standard"
                         />
@@ -149,7 +149,7 @@ export const ProjectEdit = (props) => {
                 validate={required("Bạn chưa nhập chủ đầu tư!")}
               >
                 <SelectInput
-                  optionText="displayName"
+                  optionText="investorName"
                   optionValue="_id"
                   variant="standard"
                 />

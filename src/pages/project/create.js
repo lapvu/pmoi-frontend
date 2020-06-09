@@ -20,7 +20,7 @@ import { provi } from "../../utils";
 export const ProjectCreate = (props) => {
   const [hasChild, setHasChild] = useState(false);
   return (
-    <Create {...props}>
+    <Create {...props} title="Thêm mới dự án" redirect="show">
       <SimpleForm
         variant="standard"
         warnWhenUnsavedChanges
@@ -122,7 +122,7 @@ export const ProjectCreate = (props) => {
                 validate={required("Bạn chưa nhập chủ đầu tư!")}
                 fullWidth
               >
-                <SelectInput optionText="displayName" optionValue="_id" />
+                <SelectInput optionText="investorName" optionValue="_id" />
               </ReferenceInput>
               <TextInput source="desc" label="Mô tả" fullWidth />
             </SimpleFormIterator>
@@ -135,7 +135,7 @@ export const ProjectCreate = (props) => {
             fullWidth
             validate={required("Bạn chưa nhập chủ đầu tư!")}
           >
-            <SelectInput optionText="displayName" optionValue="_id" />
+            <SelectInput optionText="investorName" optionValue="_id" />
           </ReferenceInput>
         )}
       </SimpleForm>

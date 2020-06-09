@@ -45,7 +45,6 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
     })),
 
   getMany: (resource, params) => {
-    console.log(params);
     const query = {
       id: params.ids.map((e, i) => (typeof e === "object" ? e._id : e)),
     };
@@ -76,31 +75,49 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
     });
   },
 
-  update: (resource, params) =>
-    httpClient(`${apiUrl}/${resource}/${params.id}`, {
+  update: (resource, params) => {
+    if (params.data.accountType === "MINISTRY") {
+      params.data.investorName = null;
+      params.data.desc = null;
+      params.data.website = null;
+      params.data.fax = null;
+    }
+    return httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "PUT",
       body: JSON.stringify(params.data),
-    }).then(({ json }) => ({ data: json })),
-
+    }).then(({ json }) => ({ data: json }));
+  },
   // json-server doesn't handle filters on UPDATE route, so we fallback to calling UPDATE n times instead
-  updateMany: (resource, params) =>
-    Promise.all(
+  updateMany: (resource, params) => {
+    if (params.data.accountType === "MINISTRY") {
+      params.data.investorName = null;
+      params.data.desc = null;
+      params.data.website = null;
+      params.data.fax = null;
+    }
+    return Promise.all(
       params.ids.map((id) =>
         httpClient(`${apiUrl}/${resource}/${id}`, {
           method: "PUT",
           body: JSON.stringify(params.data),
         })
       )
-    ).then((responses) => ({ data: responses.map(({ json }) => json._id) })),
-
-  create: (resource, params) =>
-    httpClient(`${apiUrl}/${resource}`, {
+    ).then((responses) => ({ data: responses.map(({ json }) => json._id) }));
+  },
+  create: (resource, params) => {
+    if (params.data.accountType === "MINISTRY") {
+      params.data.investorName = null;
+      params.data.desc = null;
+      params.data.website = null;
+      params.data.fax = null;
+    }
+    return httpClient(`${apiUrl}/${resource}`, {
       method: "POST",
       body: JSON.stringify(params.data),
     }).then(({ json }) => ({
       data: { ...params.data, id: json._id },
-    })),
-
+    }));
+  },
   delete: (resource, params) =>
     httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "DELETE",

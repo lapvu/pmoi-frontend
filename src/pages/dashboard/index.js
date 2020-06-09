@@ -2,40 +2,73 @@ import * as React from "react";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import { Title } from "react-admin";
-import { CardHeader } from "@material-ui/core";
+import { CardHeader, Grid } from "@material-ui/core";
 import PeopleIcon from "@material-ui/icons/People";
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
+import PersonIcon from "@material-ui/icons/Person";
+import ReportIcon from "@material-ui/icons/Report";
 export const Dashboard = () => (
   <div
     style={{
       display: "flex",
       justifyContent: "space-between",
-      padding: "1rem 5rem",
+      padding: "1rem 2rem",
     }}
   >
     <Title title="Thống kê" />
-    <Card style={{ display: "flex", minWidth: "20rem" }}>
-      <CardHeader
-        avatar={
-          <PeopleIcon
-            style={{ background: "red", color: "#fff", padding: "1rem" }}
-          />
-        }
-      />
-      <CardContent>
-        <h3>Tài khoản</h3>
-        <h5>100 </h5>
-      </CardContent>
-    </Card>
-    <Card style={{ display: "flex", minWidth: "20rem" }}>
-      <CardHeader avatar={<FolderOpenIcon />} />
-      <CardContent>
-        <h3>Dự án</h3>
-        <h5>100 </h5>
-      </CardContent>
-    </Card>
-    <Card style={{ display: "flex", minWidth: "20rem" }}>
-      <CardContent>Lorem ipsum sic dolor amet...</CardContent>
-    </Card>
+    <Grid container spacing={3}>
+      {data.map((e, i) => {
+        return (
+          <Grid item xs={3} sm={3} key={i}>
+            <Card style={{ display: "flex" }}>
+              <CardHeader avatar={e.icon} />
+              <CardContent style={{ padding: "1rem 0" }}>
+                <h3>{e.name}</h3>
+                <h5 style={{ marginTop: 1 }}>{e.count}</h5>
+              </CardContent>
+            </Card>
+          </Grid>
+        );
+      })}
+    </Grid>
   </div>
 );
+
+const data = [
+  {
+    name: "Tài khoản",
+    count: 100,
+    icon: (
+      <PeopleIcon
+        style={{ background: "#1abc9c", color: "#fff", padding: "1rem" }}
+      />
+    ),
+  },
+  {
+    name: "Dự án",
+    count: 100,
+    icon: (
+      <FolderOpenIcon
+        style={{ background: "#3498db", color: "#fff", padding: "1rem" }}
+      />
+    ),
+  },
+  {
+    name: "Chủ đầu tư",
+    count: 100,
+    icon: (
+      <PersonIcon
+        style={{ background: "#e67e22", color: "#fff", padding: "1rem" }}
+      />
+    ),
+  },
+  {
+    name: "Báo cáo",
+    count: 100,
+    icon: (
+      <ReportIcon
+        style={{ background: "#e74c3c", color: "#fff", padding: "1rem" }}
+      />
+    ),
+  },
+];

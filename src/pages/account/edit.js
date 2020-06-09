@@ -12,15 +12,19 @@ import {
 import { EditToolbar } from "../../components";
 
 export const AccountEdit = (props) => {
-  const [userType, setUserType] = useState("");
+  const [accountType, setAccountType] = useState("");
   return (
     <Edit {...props} title="Sửa">
-      <SimpleForm warnWhenUnsavedChanges toolbar={<EditToolbar />} redirect="show">
+      <SimpleForm
+        warnWhenUnsavedChanges
+        toolbar={<EditToolbar />}
+        redirect="show"
+      >
         <FormDataConsumer>
           {({ formData }) => (
             <>
               <SelectInput
-                source="userType"
+                source="accountType"
                 label="Loại tài khoản"
                 variant="standard"
                 fullWidth
@@ -28,20 +32,16 @@ export const AccountEdit = (props) => {
                   { id: "MINISTRY", name: "Bộ" },
                   { id: "INVESTOR", name: "Chủ đầu tư" },
                 ]}
-                value={formData.userType}
-                onChange={(e) => setUserType(e.target.value)}
+                value={formData.accountType}
+                onChange={(e) => setAccountType(e.target.value)}
                 validate={required("Bạn cần chọn loại tài khoản!")}
               />
-              {(userType || formData.userType) && (
+              {(accountType === "INVESTOR" ||
+                formData.accountType === "INVESTOR") && (
                 <TextInput
-                  source="displayName"
+                  source="investorName"
                   variant="standard"
-                  label={
-                    (userType === "INVESTOR" || formData.userType) ===
-                    "INVESTOR"
-                      ? "Tên chủ đầu tư"
-                      : "Tên của bộ"
-                  }
+                  label={"Tên chủ đầu tư"}
                   validate={required("Bạn chưa nhập tên!")}
                   fullWidth
                 />
@@ -62,8 +62,8 @@ export const AccountEdit = (props) => {
                 label="Địa chỉ"
                 fullWidth
               />
-              {(userType === "INVESTOR" ||
-                formData.userType === "INVESTOR") && (
+              {(accountType === "INVESTOR" ||
+                formData.accountType === "INVESTOR") && (
                 <TextInput
                   source="desc"
                   variant="standard"
@@ -71,8 +71,8 @@ export const AccountEdit = (props) => {
                   fullWidth
                 />
               )}
-              {(userType === "INVESTOR" ||
-                formData.userType === "INVESTOR") && (
+              {(accountType === "INVESTOR" ||
+                formData.accountType === "INVESTOR") && (
                 <TextInput
                   source="website"
                   variant="standard"
@@ -80,8 +80,8 @@ export const AccountEdit = (props) => {
                   fullWidth
                 />
               )}
-              {(userType === "INVESTOR" ||
-                formData.userType === "INVESTOR") && (
+              {(accountType === "INVESTOR" ||
+                formData.accountType === "INVESTOR") && (
                 <TextInput
                   source="fax"
                   variant="standard"

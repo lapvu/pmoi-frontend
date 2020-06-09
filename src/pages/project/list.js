@@ -11,16 +11,19 @@ import {
 import { ListActions, Filters } from "../../components";
 export const ProjectList = (props) => {
   return (
-    <List {...props} actions={<ListActions />} filters={<Filters />}>
+    <List
+      {...props}
+      actions={<ListActions />}
+      filters={<Filters />}
+      title="Danh sách dự án"
+    >
       <Datagrid rowClick="show">
         <TextField source="id" label="Mã dự án" />
         <TextField source="name" label="Tên dự án" />
-        <TextField source="investor.displayName" label="Chủ đầu tư" />
+        <TextField source="investor.investorName" label="Chủ đầu tư" />
         <FunctionField
           label="Địa điểm thực hiện"
-          render={(record) => {
-            return record.place.join(" ");
-          }}
+          render={(record) => record.place && record.place.join(" ")}
         />
         <NumberField source="totalInvestment" label="Tổng mức đầu tư" />
         <ConditionalArrayField label="Dự án con" />

@@ -14,11 +14,11 @@ import {
 
 export const ShowProject = (props) => {
   return (
-    <Show {...props} title="Xem">
+    <Show {...props} title="Xem dự án">
       <SimpleShowLayout>
         <TextField source="id" label="Mã dự án" />
         <TextField source="name" label="Tên dự án" />
-        <TextField source="investor.displayName" label="Chủ đầu tư" />
+        <TextField source="investor.investorName" label="Chủ đầu tư" />
         <TextField
           source="approvedInvestment"
           label="QD duyệt chủ trương đầu tư"
