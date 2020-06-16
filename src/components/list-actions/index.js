@@ -1,10 +1,5 @@
 import React, { cloneElement } from "react";
-import {
-  TopToolbar,
-  CreateButton,
-  ExportButton,
-  sanitizeListRestProps,
-} from "react-admin";
+import { TopToolbar, CreateButton, sanitizeListRestProps } from "react-admin";
 
 export const ListActions = ({
   currentSort,
@@ -33,14 +28,14 @@ export const ListActions = ({
         filterValues,
         context: "button",
       })}
-    <CreateButton basePath={basePath} label="Thêm mới" />
-    <ExportButton
-      disabled={total === 0}
-      resource={resource}
-      sort={currentSort}
-      filter={{ ...filterValues, ...permanentFilter }}
-      exporter={exporter}
-      maxResults={maxResults}
+    <CreateButton
+      basePath={basePath}
+      label="Thêm mới"
+      style={{
+        color: "#fff",
+        background: "#2980b9",
+        padding: "0.3rem 0.6rem",
+      }}
     />
   </TopToolbar>
 );

@@ -8,7 +8,7 @@ export const NotFoundPage = () => {
     <Card>
       <Title title="Not Found" />
       <CardContent>
-        <h1>404: Page not found</h1>
+        <h1>404: Không tìm thấy trang yêu cầu</h1>
       </CardContent>
     </Card>
   );

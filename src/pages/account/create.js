@@ -25,7 +25,7 @@ const validateAccountCreation = (values) => {
 
 const AccountCreateToolbar = (props) => (
   <Toolbar {...props}>
-    <SaveButton label="Thêm" redirect="show" submitOnEnter={false} />
+    <SaveButton label="Thêm" redirect="list" submitOnEnter={false} />
   </Toolbar>
 );
 
@@ -33,13 +33,16 @@ export const AccountCreate = (props) => {
   const [accountType, setAccountType] = useState("");
 
   return (
-    <Create {...props} title="Thêm mới tài khoản">
+    <Create
+      {...props}
+      title="Thêm mới tài khoản"
+      successMessage="Thêm tài khoản thành công!"
+    >
       <SimpleForm
         variant="standard"
         validate={validateAccountCreation}
         warnWhenUnsavedChanges
         toolbar={<AccountCreateToolbar />}
-        redirect="show"
       >
         <SelectInput
           source="accountType"

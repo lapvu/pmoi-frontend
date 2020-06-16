@@ -4,30 +4,26 @@ import {
   Datagrid,
   TextField,
   EditButton,
-  FunctionField,
   DeleteButton,
 } from "react-admin";
 import { ListActions } from "../../components";
 
-export const InvestorList = (props) => {
+export const PortfolioList = (props) => {
   return (
     <List
       {...props}
-      title="Danh sách chủ đầu tư"
+      title="Báo cáo"
       actions={<ListActions />}
       bulkActionButtons={false}
     >
       <Datagrid rowClick="show">
         <TextField source="_id" label="id" />
-        <TextField source="username" label="Tên tài khoản" />
-        <FunctionField
-          label="Tên Chủ đầu tư"
-          render={(record) => record.investorName || null}
-        />
-        <TextField source="email" label="Email" />
-        <EditButton label="Sửa" />
+        <TextField source="name" label="Tên hạng mục" />
+        <TextField source="builder" label="Người chúng thầu" />
+        <TextField source="projectName" label="Dự án" />
+        <EditButton label="Sửa" undoable={false} />
         <DeleteButton
-          confirmTitle="Bạn có chắc muốn xóa chủ đầu tư này?"
+          confirmTitle="Bạn có chắc muốn xóa hạng mục này?"
           confirmContent=""
           label="Xóa"
           cancel="Hủy"

@@ -7,7 +7,7 @@ import {
   DeleteButton,
   ReferenceField
 } from "react-admin";
-import { ListActions, Filters } from "../../components";
+import { ListActions } from "../../components";
 
 export const InvestmentList = (props) => {
   return (
@@ -15,7 +15,6 @@ export const InvestmentList = (props) => {
       {...props}
       title="Mức đầu tư"
       actions={<ListActions />}
-      filters={<Filters />}
     >
       <Datagrid rowClick="show">
         <TextField source="_id" label="id" />

@@ -4,9 +4,10 @@ import { Admin, Resource, fetchUtils } from "react-admin";
 import AccountBoxIcon from "@material-ui/icons/AccountBox";
 import AccountBalance from "@material-ui/icons/AccountBalance";
 import FolderOpenIcon from "@material-ui/icons/FolderOpen";
-
+import CategoryIcon from "@material-ui/icons/Category";
 import CreditCard from "@material-ui/icons/CreditCard";
 import Assessment from "@material-ui/icons/Assessment";
+
 import { authProvider } from "./auth";
 import jsonServerProvider from "./data-provider";
 import {
@@ -31,15 +32,19 @@ import {
   ShowInvestor,
   ReportList,
   ReportCreate,
-  // ShowReport,
-  // ReportEdit,
+  ShowReport,
   InvestmentList,
   InvestmentCreate,
+  PortfolioList,
+  PortfolioCreate,
+  ShowPortfolio,
+  ProjectListForInvestor,
+  PortfolioEdit,
 } from "./pages";
 import { LogoutButton, MyLayout } from "./components";
 import { Route } from "react-router-dom";
 
-const httpClient = (url, options = {}) => {
+export const httpClient = (url, options = {}) => {
   if (!options.headers) {
     options.headers = new Headers({ Accept: "application/json" });
   }
@@ -48,7 +53,7 @@ const httpClient = (url, options = {}) => {
   return fetchUtils.fetchJson(url, options);
 };
 
-const dataProvider = jsonServerProvider("http://localhost", httpClient);
+const dataProvider = jsonServerProvider("https://pmoi-api.herokuapp.com", httpClient);
 
 function App() {
   return (
@@ -74,6 +79,19 @@ function App() {
             show={ShowAccount}
           />
         ) : null,
+        <Resource
+          name="project"
+          options={{ label: "Dự án" }}
+          icon={FolderOpenIcon}
+          list={
+            permissions.includes("INVESTOR")
+              ? ProjectListForInvestor
+              : ProjectList
+          }
+          create={permissions.includes("INVESTOR") ? null : ProjectCreate}
+          edit={permissions.includes("INVESTOR") ? null : ProjectEdit}
+          show={ShowProject}
+        />,
         permissions.includes("MINISTRY") ? (
           <Resource
             name="investor"
@@ -85,39 +103,23 @@ function App() {
             show={ShowInvestor}
           />
         ) : null,
-        permissions.includes("ADMIN") || permissions.includes("MINISTRY") ? (
-          <Resource
-            name="investment"
-            options={{ label: "Mức đầu tư" }}
-            icon={CreditCard}
-            list={InvestmentList}
-            create={InvestmentCreate}
-            // edit={ResourceEdit}
-            // show={ShowResource}
-          />
-        ) : null,
-        permissions.includes("ADMIN") ? (
-          <Resource
-            name="report"
-            options={{ label: "Báo cáo" }}
-            icon={Assessment}
-            list={ReportList}
-            create={ReportCreate}
-            // edit={ReportEdit}
-            // show={ShowReport}
-          />
-        ) : null,
-        permissions.includes("ADMIN") || permissions.includes("MINISTRY") ? (
-          <Resource
-            name="project"
-            options={{ label: "Dự án" }}
-            icon={FolderOpenIcon}
-            list={ProjectList}
-            create={ProjectCreate}
-            edit={ProjectEdit}
-            show={ShowProject}
-          />
-        ) : null,
+        <Resource
+          name="investment"
+          options={{ label: "Mức đầu tư" }}
+          icon={CreditCard}
+          list={InvestmentList}
+          create={InvestmentCreate}
+          // edit={ResourceEdit}
+          // show={ShowResource}
+        />,
+        <Resource
+          name="report"
+          options={{ label: "Báo cáo" }}
+          icon={Assessment}
+          list={ReportList}
+          create={permissions.includes("INVESTOR") ? ReportCreate : null}
+          show={ShowReport}
+        />,
         permissions.includes("ADMIN") ? (
           <Resource
             name="resources"
@@ -127,6 +129,17 @@ function App() {
             create={ResourceCreate}
             edit={ResourceEdit}
             show={ShowResource}
+          />
+        ) : null,
+        permissions.includes("INVESTOR") ? (
+          <Resource
+            name="portfolio"
+            options={{ label: "Hạng mục đầu tư" }}
+            icon={CategoryIcon}
+            list={PortfolioList}
+            create={PortfolioCreate}
+            edit={PortfolioEdit}
+            show={ShowPortfolio}
           />
         ) : null,
       ]}

@@ -27,10 +27,12 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
 
     return httpClient(url).then(({ headers, json }) => {
       return {
-        data: json.data.map((e, i) => ({
-          id: e._id,
-          ...e,
-        })),
+        data: json.data.map((e, i) => {
+          return {
+            id: e._id,
+            ...e,
+          };
+        }),
         total: json.total,
       };
     });
@@ -69,28 +71,51 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
 
     return httpClient(url).then(({ headers, json }) => {
       return {
-        data: json.data.map((e, i) => ({ id: e._id, ...e })),
+        data: json.data.map((e, i) => {
+          return {
+            id: e._id,
+            ...e,
+          };
+        }),
         total: json.total,
       };
     });
   },
 
-  update: (resource, params) => {
+  update: async (resource, params) => {
     if (params.data.accountType === "MINISTRY") {
-      params.data.investorName = null;
+      delete params.data.investorName;
       params.data.desc = null;
       params.data.website = null;
       params.data.fax = null;
     }
+    if (
+      params.data["attachment"] &&
+      params.data["attachment"].rawFile.lastModified
+    ) {
+      const data = new FormData();
+      data.append("file", params.data["attachment"].rawFile);
+      const result = await httpClient(`${apiUrl}/${resource}/upload`, {
+        method: "POST",
+        body: data,
+      });
+      params.data["attachment"] = {
+        attachment: `${apiUrl}/${resource}/${JSON.parse(result.body).path}`,
+        rawFile: {
+          path: JSON.parse(result.body).path,
+        },
+        title: JSON.parse(result.body).filename,
+      };
+    }
     return httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "PUT",
       body: JSON.stringify(params.data),
-    }).then(({ json }) => ({ data: json }));
+    }).then(({ json }) => ({ data: { ...params.data, id: json._id } }));
   },
   // json-server doesn't handle filters on UPDATE route, so we fallback to calling UPDATE n times instead
   updateMany: (resource, params) => {
     if (params.data.accountType === "MINISTRY") {
-      params.data.investorName = null;
+      delete params.data.investorName;
       params.data.desc = null;
       params.data.website = null;
       params.data.fax = null;
@@ -104,12 +129,27 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
       )
     ).then((responses) => ({ data: responses.map(({ json }) => json._id) }));
   },
-  create: (resource, params) => {
+  create: async (resource, params) => {
     if (params.data.accountType === "MINISTRY") {
-      params.data.investorName = null;
+      delete params.data.investorName;
       params.data.desc = null;
       params.data.website = null;
       params.data.fax = null;
+    }
+    if (params.data["attachment"]) {
+      const data = new FormData();
+      data.append("file", params.data["attachment"].rawFile);
+      const result = await httpClient(`${apiUrl}/${resource}/upload`, {
+        method: "POST",
+        body: data,
+      });
+      params.data["attachment"] = {
+        attachment: `${apiUrl}/${resource}/${JSON.parse(result.body).path}`,
+        rawFile: {
+          path: JSON.parse(result.body).path,
+        },
+        title: JSON.parse(result.body).filename,
+      };
     }
     return httpClient(`${apiUrl}/${resource}`, {
       method: "POST",
@@ -118,12 +158,12 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
       data: { ...params.data, id: json._id },
     }));
   },
+
   delete: (resource, params) =>
     httpClient(`${apiUrl}/${resource}/${params.id}`, {
       method: "DELETE",
     }).then(({ json }) => ({ data: json })),
 
-  // json-server doesn't handle filters on DELETE route, so we fallback to calling DELETE n times instead
   deleteMany: (resource, params) =>
     Promise.all(
       params.ids.map((id) =>

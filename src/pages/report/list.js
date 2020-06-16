@@ -1,13 +1,6 @@
 import React from "react";
-import {
-  List,
-  Datagrid,
-  TextField,
-  EditButton,
-  DeleteButton,
-  ReferenceField
-} from "react-admin";
-import { ListActions, Filters } from "../../components";
+import { List, Datagrid, TextField, DeleteButton } from "react-admin";
+import { ListActions } from "../../components";
 
 export const ReportList = (props) => {
   return (
@@ -15,16 +8,19 @@ export const ReportList = (props) => {
       {...props}
       title="Báo cáo"
       actions={<ListActions />}
-      filters={<Filters />}
+      bulkActionButtons={false}
     >
       <Datagrid rowClick="show">
         <TextField source="_id" label="id" />
-        <TextField source="name" label="Tên" />
-        <ReferenceField source="project" reference="project">
-+               <TextField source="name" label="Dự án" />
-        </ReferenceField>
-        <EditButton label="Sửa" />
-        <DeleteButton label = "Xóa" />
+        <TextField source="title" label="Tên" />
+        <TextField source="projectName" label="Dự án" />
+        <DeleteButton
+          confirmTitle="Bạn có chắc muốn xóa báo cáo này?"
+          confirmContent=""
+          label="Xóa"
+          cancel="Hủy"
+          undoable={false}
+        />
       </Datagrid>
     </List>
   );

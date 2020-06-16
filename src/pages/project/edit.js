@@ -15,17 +15,18 @@ import {
   FormDataConsumer,
 } from "react-admin";
 import RichTextInput from "ra-input-rich-text";
+
 import { provi } from "../../utils";
 import { EditToolbar } from "../../components";
+
 export const ProjectEdit = (props) => {
   const [hasChild, setHasChild] = useState(false);
   return (
-    <Edit {...props} title="Sửa dự án" redirect="show">
+    <Edit {...props} title="Sửa dự án" successMessage="Sửa dự án thành công!">
       <SimpleForm
         warnWhenUnsavedChanges
         toolbar={<EditToolbar />}
         variant="standard"
-        redirect="show"
       >
         <TextInput
           source="name"

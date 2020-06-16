@@ -6,7 +6,13 @@ export const EditToolbar = (props) => (
     {...props}
     style={{ display: "flex", justifyContent: "space-between" }}
   >
-    <SaveButton label="Sửa" submitOnEnter={false} />
-    <DeleteButton undoable={false} label="Xoá" />
+    <SaveButton label="Sửa" undoable={false} submitOnEnter={false} />
+    <DeleteButton
+      confirmTitle="Bạn có chắc muốn xóa mục này?"
+      confirmContent=""
+      label="Xóa"
+      cancel="Hủy"
+      undoable={false}
+    />
   </Toolbar>
 );

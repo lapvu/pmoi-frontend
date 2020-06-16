@@ -6,7 +6,7 @@ import {
   EditButton,
   DeleteButton,
 } from "react-admin";
-import { ListActions, Filters } from "../../components";
+import { ListActions } from "../../components";
 
 export const ResourceList = (props) => {
   return (
@@ -14,7 +14,6 @@ export const ResourceList = (props) => {
       {...props}
       title="Nguồn vốn"
       actions={<ListActions />}
-      filters={<Filters />}
     >
       <Datagrid rowClick="show">
         <TextField source="_id" label="id" />

@@ -9,6 +9,7 @@ export const authProvider = {
       .then((res) => {
         localStorage.setItem("token", res.data.token);
         localStorage.setItem("roles", JSON.stringify(res.data.roles));
+        localStorage.setItem("_id", res.data._id);
         return Promise.resolve();
       })
       .catch((err) => {
@@ -20,6 +21,7 @@ export const authProvider = {
   logout: () => {
     localStorage.removeItem("token");
     localStorage.removeItem("roles");
+    localStorage.removeItem("_id");
     return Promise.resolve();
   },
   checkAuth: () => {
@@ -30,6 +32,7 @@ export const authProvider = {
     if (status === 401 || status === 403) {
       localStorage.removeItem("token");
       localStorage.removeItem("roles");
+      localStorage.removeItem("_id");
       return Promise.reject();
     }
     return Promise.resolve();

@@ -5,8 +5,12 @@ import {
   TextField,
   EditButton,
   FunctionField,
+  DeleteButton,
 } from "react-admin";
-import { ListActions, Filters } from "../../components";
+import { Chip } from "@material-ui/core";
+import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
+import FaceIcon from "@material-ui/icons/Face";
+import { ListActions } from "../../components";
 
 export const AccountList = (props) => {
   return (
@@ -14,7 +18,7 @@ export const AccountList = (props) => {
       {...props}
       title="Tài khoản"
       actions={<ListActions />}
-      filters={<Filters />}
+      bulkActionButtons={false}
     >
       <Datagrid rowClick="show">
         <TextField source="_id" label="id" />
@@ -27,10 +31,32 @@ export const AccountList = (props) => {
         <FunctionField
           label="Loại tài khoản"
           render={(record) =>
-            record.accountType === "MINISTRY" ? "Bộ" : "Chủ đầu tư"
+            record.accountType === "MINISTRY" ? (
+              <Chip
+                icon={<InsertEmoticonIcon />}
+                label="Bộ"
+                color="secondary"
+              />
+            ) : (
+              <Chip
+                icon={<FaceIcon style={{ color: "#fff" }} />}
+                label="Chủ đầu tư"
+                style={{
+                  background: "#e74c3c",
+                  color: "#fff",
+                }}
+              />
+            )
           }
         />
         <EditButton label="Sửa" />
+        <DeleteButton
+          confirmTitle="Bạn có chắc muốn xóa tài khoản này này?"
+          confirmContent=""
+          label="Xóa"
+          cancel="Hủy"
+          undoable={false}
+        />
       </Datagrid>
     </List>
   );

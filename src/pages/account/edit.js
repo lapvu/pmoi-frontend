@@ -14,12 +14,8 @@ import { EditToolbar } from "../../components";
 export const AccountEdit = (props) => {
   const [accountType, setAccountType] = useState("");
   return (
-    <Edit {...props} title="Sửa">
-      <SimpleForm
-        warnWhenUnsavedChanges
-        toolbar={<EditToolbar />}
-        redirect="show"
-      >
+    <Edit {...props} title="Sửa" successMessage="Sửa tài khoản thành công!">
+      <SimpleForm warnWhenUnsavedChanges toolbar={<EditToolbar />}>
         <FormDataConsumer>
           {({ formData }) => (
             <>

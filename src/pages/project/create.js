@@ -20,12 +20,15 @@ import { provi } from "../../utils";
 export const ProjectCreate = (props) => {
   const [hasChild, setHasChild] = useState(false);
   return (
-    <Create {...props} title="Thêm mới dự án" redirect="show">
+    <Create
+      {...props}
+      title="Thêm mới dự án"
+      successMessage="Thêm dự án thành công!"
+    >
       <SimpleForm
         variant="standard"
         warnWhenUnsavedChanges
         toolbar={<ProjectCreateToolbar />}
-        redirect="show"
       >
         <TextInput
           source="name"

@@ -3,7 +3,6 @@ import {
   Show,
   SimpleShowLayout,
   TextField,
-  NumberField,
   FunctionField,
   RichTextField,
   DateField,
@@ -11,7 +10,7 @@ import {
   ArrayField,
   Datagrid,
 } from "react-admin";
-
+import CurrencyFormat from "react-currency-format";
 export const ShowProject = (props) => {
   return (
     <Show {...props} title="Xem dự án">
@@ -33,9 +32,17 @@ export const ShowProject = (props) => {
           label="Ngày phê duyệt dự án đầu tư ban đầu"
         />
         <TextField source="treasuryAddress" label="Địa điểm kho bạc" />
-        <TextField
-          source="totalInvestment"
+        <FunctionField
           label="Tổng mức đầu tư (triệu đồng)"
+          render={(record) => (
+            <CurrencyFormat
+              value={record.totalInvestment}
+              displayType={"text"}
+              thousandSeparator="."
+              decimalSeparator=","
+              suffix={" vnd"}
+            />
+          )}
         />
         <DateField source="constructionTime" label="Thời gian thi công" />
         <DateField source="completionTime" label="Thời gian hoàn thành" />
@@ -48,7 +55,6 @@ export const ShowProject = (props) => {
             return record.place.join(" ");
           }}
         />
-        <NumberField source="totalInvestment" label="Tổng mức đầu tư" />
         <ConditionalArrayField />
       </SimpleShowLayout>
     </Show>
@@ -57,20 +63,21 @@ export const ShowProject = (props) => {
 
 const ConditionalArrayField = ({ record, ...rest }) =>
   record && record.childProjects ? (
-    <Labeled label="Dự án con">
+    <Labeled label="Tiểu dự án">
       <ArrayField
         source="childProjects"
-        label="Dự án con"
+        label="Tiểu dự án"
         record={record}
         {...rest}
       >
         <Datagrid>
-          <TextField source="name" label="Tên dự án con" sortable={false} />
+          <TextField source="name" label="Tên tiểu dự án" sortable={false} />
           <TextField
-            source="investor.displayName"
+            source="investor.investorName"
             label="Chủ đầu tư"
             sortable={false}
           />
+          <TextField source="desc" label="Mô tả" sortable={false} />
         </Datagrid>
       </ArrayField>
     </Labeled>
