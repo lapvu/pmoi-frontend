@@ -14,7 +14,7 @@ import { EditToolbar } from "../../components";
 export const AccountEdit = (props) => {
   const [accountType, setAccountType] = useState("");
   return (
-    <Edit {...props} title="Sửa" successMessage="Sửa tài khoản thành công!">
+    <Edit {...props} title="Sửa" undoable={false} successMessage="Sửa tài khoản thành công!">
       <SimpleForm warnWhenUnsavedChanges toolbar={<EditToolbar />}>
         <FormDataConsumer>
           {({ formData }) => (
@@ -31,6 +31,7 @@ export const AccountEdit = (props) => {
                 value={formData.accountType}
                 onChange={(e) => setAccountType(e.target.value)}
                 validate={required("Bạn cần chọn loại tài khoản!")}
+                style={{ display: "none" }}
               />
               {(accountType === "INVESTOR" ||
                 formData.accountType === "INVESTOR") && (

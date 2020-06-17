@@ -7,6 +7,8 @@ import FolderOpenIcon from "@material-ui/icons/FolderOpen";
 import CategoryIcon from "@material-ui/icons/Category";
 import CreditCard from "@material-ui/icons/CreditCard";
 import Assessment from "@material-ui/icons/Assessment";
+import vietnameseMessages from "ra-language-vietnamese";
+import polyglotI18nProvider from "ra-i18n-polyglot";
 
 import { authProvider } from "./auth";
 import jsonServerProvider from "./data-provider";
@@ -53,11 +55,17 @@ export const httpClient = (url, options = {}) => {
   return fetchUtils.fetchJson(url, options);
 };
 
-const dataProvider = jsonServerProvider("https://pmoi-api.herokuapp.com", httpClient);
+const dataProvider = jsonServerProvider("http://localhost", httpClient);
+
+const i18nProvider = polyglotI18nProvider((locale) =>
+  locale === "en" ? vietnameseMessages : null
+);
 
 function App() {
   return (
     <Admin
+      locale="vi"
+      i18nProvider={i18nProvider}
       layout={MyLayout}
       catchAll={NotFoundPage}
       dashboard={Dashboard}

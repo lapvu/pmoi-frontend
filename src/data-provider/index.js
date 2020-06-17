@@ -22,6 +22,7 @@ export default (apiUrl, httpClient = fetchUtils.fetchJson) => ({
       _order: order,
       _start: (page - 1) * perPage,
       _end: page * perPage,
+      _href: window.location.href,
     };
     const url = `${apiUrl}/${resource}?${stringify(query)}`;
 

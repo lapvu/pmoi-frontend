@@ -15,7 +15,6 @@ export const InvestorEdit = (props) => {
       <SimpleForm
         warnWhenUnsavedChanges
         toolbar={<EditToolbar />}
-        redirect="show"
       >
         <TextInput
           source="accountType"
