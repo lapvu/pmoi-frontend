@@ -55,7 +55,7 @@ export const httpClient = (url, options = {}) => {
   return fetchUtils.fetchJson(url, options);
 };
 
-const dataProvider = jsonServerProvider("http://localhost", httpClient);
+const dataProvider = jsonServerProvider("https://pmoi-api.herokuapp.com", httpClient);
 
 const i18nProvider = polyglotI18nProvider((locale) =>
   locale === "en" ? vietnameseMessages : null

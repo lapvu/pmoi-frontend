@@ -29,7 +29,7 @@ export const MyAppBar = (props) => {
     channel.bind("push", (data) => {
       setListNoti([data, ...listNoti]);
     });
-    httpClient("http://localhost/notification", {
+    httpClient("https://pmoi-api.herokuapp.com/notification", {
       method: "GET",
     })
       .then(({ json }) => {
@@ -63,7 +63,7 @@ export const MyAppBar = (props) => {
   const handleClick = (event) => {
     if (notificationCount) {
       let _id = localStorage.getItem("_id");
-      httpClient("http://localhost/notification", {
+      httpClient("https://pmoi-api.herokuapp.com/notification", {
         method: "PUT",
       })
         .then(({ json }) => {
