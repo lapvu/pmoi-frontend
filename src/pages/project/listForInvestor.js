@@ -1,6 +1,7 @@
 import React from "react";
 import { List, Datagrid, FunctionField } from "react-admin";
 import CurrencyFormat from "react-currency-format";
+import TextTruncate from "react-text-truncate";
 export const ProjectListForInvestor = (props) => {
   return (
     <List {...props} title="Danh sách dự án" bulkActionButtons={false}>
@@ -13,9 +14,16 @@ export const ProjectListForInvestor = (props) => {
         />
         <FunctionField
           label="Tên"
-          render={(record) =>
-            record.hasChildProject ? record.childProjects.name : record.name
-          }
+          render={(record) => (
+            <TextTruncate
+              line={1}
+              element="span"
+              truncateText="…"
+              text={
+                record.hasChildProject ? record.childProjects.name : record.name
+              }
+            />
+          )}
         />
         <FunctionField
           label="Địa điểm thực hiện"

@@ -9,6 +9,7 @@ import {
   DeleteButton,
 } from "react-admin";
 import CurrencyFormat from "react-currency-format";
+import TextTruncate from "react-text-truncate";
 import { ListActions } from "../../components";
 export const ProjectList = (props) => {
   return (
@@ -20,7 +21,18 @@ export const ProjectList = (props) => {
     >
       <Datagrid rowClick="show">
         <TextField source="id" label="Mã dự án" />
-        <TextField source="name" label="Tên dự án" />
+        <FunctionField
+          label="Tên dự án"
+          sortable={true}
+          render={(record) => (
+            <TextTruncate
+              line={1}
+              element="span"
+              truncateText="…"
+              text={record.name}
+            />
+          )}
+        />
         <TextField source="investor.investorName" label="Chủ đầu tư" />
         <FunctionField
           label="Địa điểm thực hiện"

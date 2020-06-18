@@ -10,6 +10,7 @@ import {
 import { Chip } from "@material-ui/core";
 import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import FaceIcon from "@material-ui/icons/Face";
+import TextTruncate from 'react-text-truncate'; 
 import { ListActions } from "../../components";
 
 export const AccountList = (props) => {
@@ -25,7 +26,16 @@ export const AccountList = (props) => {
         <TextField source="username" label="Tên tài khoản" />
         <FunctionField
           label="Tên Chủ đầu tư"
-          render={(record) => record.investorName || null}
+          render={(record) =>
+            (
+              <TextTruncate
+                line={1}
+                element="span"
+                truncateText="…"
+                text={record.investorName}
+              />
+            ) || null
+          }
         />
         <TextField source="email" label="Email" />
         <FunctionField
