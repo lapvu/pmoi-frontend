@@ -25,7 +25,7 @@ const validateAccountCreation = (values) => {
 
 const AccountCreateToolbar = (props) => (
   <Toolbar {...props}>
-    <SaveButton label="Thêm" redirect="list" submitOnEnter={false} />
+    <SaveButton label="Lưu" redirect="list" submitOnEnter={false} />
   </Toolbar>
 );
 
