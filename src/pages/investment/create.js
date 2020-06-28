@@ -14,7 +14,7 @@ import {
 
 const InvestmentCreateToolbar = (props) => (
     <Toolbar {...props}>
-        <SaveButton label="Thêm" redirect={false} submitOnEnter={false} />
+        <SaveButton label="Lưu" redirect={false} submitOnEnter={false} />
     </Toolbar>
 );
 

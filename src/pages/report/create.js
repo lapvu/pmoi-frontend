@@ -14,7 +14,7 @@ import {
 
 const ReportCreateToolbar = (props) => (
     <Toolbar {...props}>
-        <SaveButton label="Thêm" redirect={false} submitOnEnter={false} />
+        <SaveButton label="Gửi" redirect={false} submitOnEnter={false} />
     </Toolbar>
 );
 
