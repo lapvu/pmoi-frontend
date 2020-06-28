@@ -172,6 +172,6 @@ export const ProjectCreateForInvestor = (props) => {
 
 const ProjectCreateToolbar = (props) => (
   <Toolbar {...props}>
-    <SaveButton label="Thêm" redirect="show" submitOnEnter={false} />
+    <SaveButton label="Lưu" redirect="show" submitOnEnter={false} />
   </Toolbar>
 );
