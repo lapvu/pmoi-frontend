@@ -35,13 +35,17 @@ import {
   ReportList,
   ReportCreate,
   ShowReport,
-  InvestmentList,
-  InvestmentCreate,
+  DisbursementList,
+  DisbursementCreate,
   PortfolioList,
   PortfolioCreate,
   ShowPortfolio,
   ProjectListForInvestor,
   PortfolioEdit,
+  ProjectCreateForInvestor,
+  ProjectEditForMinistry,
+  DisbursementEdit,
+  ShowDisbursement,
 } from "./pages";
 import { LogoutButton, MyLayout } from "./components";
 import { Route } from "react-router-dom";
@@ -55,7 +59,10 @@ export const httpClient = (url, options = {}) => {
   return fetchUtils.fetchJson(url, options);
 };
 
-const dataProvider = jsonServerProvider("https://pmoi-api.herokuapp.com", httpClient);
+const dataProvider = jsonServerProvider(
+  "https://pmoi-api.herokuapp.com",
+  httpClient
+);
 
 const i18nProvider = polyglotI18nProvider((locale) =>
   locale === "en" ? vietnameseMessages : null
@@ -96,8 +103,20 @@ function App() {
               ? ProjectListForInvestor
               : ProjectList
           }
-          create={permissions.includes("INVESTOR") ? null : ProjectCreate}
-          edit={permissions.includes("INVESTOR") ? null : ProjectEdit}
+          create={
+            permissions.includes("INVESTOR")
+              ? null
+              : permissions.includes("MINISTRY")
+              ? ProjectCreateForInvestor
+              : ProjectCreate
+          }
+          edit={
+            permissions.includes("INVESTOR")
+              ? null
+              : permissions.includes("MINISTRY")
+              ? ProjectEditForMinistry
+              : ProjectEdit
+          }
           show={ShowProject}
         />,
         permissions.includes("MINISTRY") ? (
@@ -111,15 +130,18 @@ function App() {
             show={ShowInvestor}
           />
         ) : null,
-        <Resource
-          name="investment"
-          options={{ label: "Mức đầu tư" }}
-          icon={CreditCard}
-          list={InvestmentList}
-          create={InvestmentCreate}
-          // edit={ResourceEdit}
-          // show={ShowResource}
-        />,
+        permissions.includes("ADMIN") || permissions.includes("MINISTRY") ? (
+          <Resource
+            name="disbursement"
+            options={{ label: "Giải ngân" }}
+            icon={CreditCard}
+            list={DisbursementList}
+            create={DisbursementCreate}
+            edit={DisbursementEdit}
+            show={ShowDisbursement}
+          />
+        ) : null,
+
         <Resource
           name="report"
           options={{ label: "Báo cáo" }}
@@ -128,7 +150,7 @@ function App() {
           create={permissions.includes("INVESTOR") ? ReportCreate : null}
           show={ShowReport}
         />,
-        permissions.includes("ADMIN") ? (
+        permissions.includes("ADMIN") || permissions.includes("MINISTRY") ? (
           <Resource
             name="resources"
             options={{ label: "Nguồn vốn" }}

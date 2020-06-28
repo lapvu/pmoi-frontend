@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useLogin, useNotify, Notification } from "react-admin";
-import { Button, TextField, Paper, CircularProgress } from "@material-ui/core";
+import { Button, Paper, CircularProgress } from "@material-ui/core";
 import { AccountCircle } from "@material-ui/icons";
+import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 export const LoginPage = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const ref = useRef("");
   const login = useLogin();
   const notify = useNotify();
   const submit = (e) => {
@@ -33,13 +35,18 @@ export const LoginPage = () => {
           padding: "1rem",
         }}
       >
-        <form onSubmit={submit} autoComplete="off" style={{ width: "100%" }}>
+        <ValidatorForm
+          ref={ref}
+          onSubmit={submit}
+          onError={(errors) => console.log(errors)}
+          autoComplete="off"
+          style={{ width: "100%" }}
+        >
           <div style={{ textAlign: "center", marginBottom: "1.5rem" }}>
             <AccountCircle style={{ fontSize: 55 }} />
           </div>
           <div style={{ marginBottom: "2rem" }}>
-            <TextField
-              required
+            <TextValidator
               size="small"
               name="username"
               label="Tên đăng nhập"
@@ -47,11 +54,12 @@ export const LoginPage = () => {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               style={{ width: "100%" }}
+              validators={["required"]}
+              errorMessages={["Bạn chưa nhập tên đăng nhập!"]}
             />
           </div>
           <div style={{ marginBottom: "2rem" }}>
-            <TextField
-              required
+            <TextValidator
               size="small"
               name="password"
               label="Mật khẩu"
@@ -59,6 +67,8 @@ export const LoginPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               style={{ width: "100%" }}
+              validators={["required"]}
+              errorMessages={["Bạn chưa nhập mật khẩu!"]}
             />
           </div>
           <div style={{ position: "relative" }}>
@@ -84,7 +94,7 @@ export const LoginPage = () => {
               />
             )}
           </div>
-        </form>
+        </ValidatorForm>
       </Paper>
       <Notification />
     </div>

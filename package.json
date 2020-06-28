@@ -21,6 +21,7 @@
     "react-admin": "^3.5.3",
     "react-currency-format": "^1.0.0",
     "react-dom": "^16.13.1",
+    "react-material-ui-form-validator": "^2.0.10",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
     "react-text-truncate": "^0.16.0",

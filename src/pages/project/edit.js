@@ -19,6 +19,28 @@ import RichTextInput from "ra-input-rich-text";
 import { provi } from "../../utils";
 import { EditToolbar } from "../../components";
 
+const validate = (values) => {
+  const errors = {
+    childProjects: [],
+  };
+  if (values.constructionTime > values.completionTime) {
+    errors.constructionTime = "Thời gian không phù hợp!";
+  }
+  if (values.childProjects) {
+    for (let i = 0; i < values.childProjects.length - 1; i++) {
+      if (
+        values.childProjects[i + 1] &&
+        values.childProjects[i] &&
+        values.childProjects[i + 1].name === values.childProjects[i].name
+      ) {
+        errors.childProjects[i + 1] = { name: ""};
+        errors.childProjects[i + 1].name = "Tên tiểu dự án đã bị trùng!";
+      }
+    }
+  }
+  return errors;
+};
+
 export const ProjectEdit = (props) => {
   const [hasChild, setHasChild] = useState(false);
   return (
@@ -27,6 +49,7 @@ export const ProjectEdit = (props) => {
         warnWhenUnsavedChanges
         toolbar={<EditToolbar />}
         variant="standard"
+        validate={validate}
       >
         <TextInput
           source="name"

@@ -6,6 +6,7 @@ import {
   EditButton,
   DeleteButton,
 } from "react-admin";
+
 import { ListActions } from "../../components";
 
 export const ResourceList = (props) => {
@@ -14,6 +15,7 @@ export const ResourceList = (props) => {
       {...props}
       title="Nguồn vốn"
       actions={<ListActions />}
+      bulkActionButtons={false}
     >
       <Datagrid rowClick="show">
         <TextField source="_id" label="id" />
@@ -21,7 +23,13 @@ export const ResourceList = (props) => {
         <TextField source="shortName" label="Tên viết tắt" />
         <TextField source="desc" label="Mô tả" />
         <EditButton label="Sửa" />
-        <DeleteButton label = "Xóa" />
+        <DeleteButton
+          confirmTitle="Bạn có chắc muốn xóa nguồn vốn này?"
+          confirmContent=""
+          label="Xóa"
+          cancel="Hủy"
+          undoable={false}
+        />
       </Datagrid>
     </List>
   );

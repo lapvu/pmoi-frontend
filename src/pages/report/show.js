@@ -14,7 +14,7 @@ export const ShowReport = (props) => {
         <TextField source="title" label="Tên báo cáo" />
         <RichTextField source="body" label="Mô tả" />
         <TextField source="projectName" label="Dự án" />
-        <FileField source="attachment" title="File đính kèm" />
+        <FileField source="attachment.attachment" title="File đính kèm" />
       </SimpleShowLayout>
     </Show>
   );

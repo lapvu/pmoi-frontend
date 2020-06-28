@@ -1,22 +1,23 @@
 import React, { useState } from "react";
 import {
-  Create,
   SimpleForm,
   TextInput,
+  Edit,
+  required,
   DateInput,
   SelectArrayInput,
-  required,
-  Toolbar,
-  SaveButton,
   number,
-  ArrayInput,
+  SelectInput,
+  ReferenceInput,
   SimpleFormIterator,
   BooleanInput,
-  ReferenceInput,
-  SelectInput,
+  ArrayInput,
+  FormDataConsumer,
 } from "react-admin";
 import RichTextInput from "ra-input-rich-text";
+
 import { provi } from "../../utils";
+import { EditToolbar } from "../../components";
 
 const validate = (values) => {
   const errors = {
@@ -40,18 +41,14 @@ const validate = (values) => {
   return errors;
 };
 
-export const ProjectCreate = (props) => {
+export const ProjectEditForMinistry = (props) => {
   const [hasChild, setHasChild] = useState(false);
   return (
-    <Create
-      {...props}
-      title="Thêm mới dự án"
-      successMessage="Thêm dự án thành công!"
-    >
+    <Edit {...props} title="Sửa dự án" successMessage="Sửa dự án thành công!">
       <SimpleForm
-        variant="standard"
         warnWhenUnsavedChanges
-        toolbar={<ProjectCreateToolbar />}
+        toolbar={<EditToolbar />}
+        variant="standard"
         validate={validate}
       >
         <TextInput
@@ -129,49 +126,62 @@ export const ProjectCreate = (props) => {
           source="hasChildProject"
           onChange={(event) => setHasChild(event)}
         />
-        {hasChild ? (
-          <ArrayInput
-            source="childProjects"
-            label="Dự án con"
-            validate={required("Bạn chưa nhập dự án con!")}
-          >
-            <SimpleFormIterator>
-              <TextInput
-                source="name"
-                label="Tên dự án con"
-                fullWidth
-                validate={required("Bạn chưa nhập tên dự án con!")}
-              />
+        <FormDataConsumer>
+          {({ formData }) =>
+            hasChild || formData.hasChildProject ? (
+              <ArrayInput
+                source="childProjects"
+                label="Dự án con"
+                validate={required("Bạn chưa nhập dự án con!")}
+                variant="standard"
+              >
+                <SimpleFormIterator>
+                  <TextInput
+                    source="name"
+                    label="Tên dự án con"
+                    fullWidth
+                    validate={required("Bạn chưa nhập tên dự án con!")}
+                  />
+                  <FormDataConsumer>
+                    {({ getSource, ...rest }) => (
+                      <ReferenceInput
+                        label="Chủ đầu tư"
+                        source={getSource("investor._id")}
+                        reference="investor"
+                        validate={required("Bạn chưa nhập chủ đầu tư!")}
+                        fullWidth
+                        variant="standard"
+                      >
+                        <SelectInput
+                          optionText="investorName"
+                          optionValue="_id"
+                          variant="standard"
+                        />
+                      </ReferenceInput>
+                    )}
+                  </FormDataConsumer>
+
+                  <TextInput source="desc" label="Mô tả" fullWidth />
+                </SimpleFormIterator>
+              </ArrayInput>
+            ) : (
               <ReferenceInput
                 label="Chủ đầu tư"
-                source="investor"
-                reference="account"
-                validate={required("Bạn chưa nhập chủ đầu tư!")}
+                source="investor._id"
+                reference="investor"
                 fullWidth
+                validate={required("Bạn chưa nhập chủ đầu tư!")}
               >
-                <SelectInput optionText="investorName" optionValue="_id" />
+                <SelectInput
+                  optionText="investorName"
+                  optionValue="_id"
+                  variant="standard"
+                />
               </ReferenceInput>
-              <TextInput source="desc" label="Mô tả" fullWidth />
-            </SimpleFormIterator>
-          </ArrayInput>
-        ) : (
-          <ReferenceInput
-            label="Chủ đầu tư"
-            source="investor"
-            reference="account"
-            fullWidth
-            validate={required("Bạn chưa nhập chủ đầu tư!")}
-          >
-            <SelectInput optionText="investorName" optionValue="_id" />
-          </ReferenceInput>
-        )}
+            )
+          }
+        </FormDataConsumer>
       </SimpleForm>
-    </Create>
+    </Edit>
   );
 };
-
-const ProjectCreateToolbar = (props) => (
-  <Toolbar {...props}>
-    <SaveButton label="Thêm" redirect="show" submitOnEnter={false} />
-  </Toolbar>
-);

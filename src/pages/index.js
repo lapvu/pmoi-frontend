@@ -6,5 +6,5 @@ export * from "./account";
 export * from "./resources";
 export * from "./investor";
 export * from "./report";
-export * from "./investment";
+export * from "./disbursement";
 export * from "./portfolio"

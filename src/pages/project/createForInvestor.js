@@ -32,7 +32,7 @@ const validate = (values) => {
         values.childProjects[i] &&
         values.childProjects[i + 1].name === values.childProjects[i].name
       ) {
-        errors.childProjects[i + 1] = { name: "" };
+        errors.childProjects[i + 1] = { name: ""};
         errors.childProjects[i + 1].name = "Tên tiểu dự án đã bị trùng!";
       }
     }
@@ -40,7 +40,7 @@ const validate = (values) => {
   return errors;
 };
 
-export const ProjectCreate = (props) => {
+export const ProjectCreateForInvestor = (props) => {
   const [hasChild, setHasChild] = useState(false);
   return (
     <Create
@@ -125,27 +125,27 @@ export const ProjectCreate = (props) => {
         <TextInput source="typeSource" label="Loại nguồn vốn" fullWidth />
         <RichTextInput source="desc" label="Mô tả" />
         <BooleanInput
-          label="Có dự án con?"
+          label="Có tiểu dự án?"
           source="hasChildProject"
           onChange={(event) => setHasChild(event)}
         />
         {hasChild ? (
           <ArrayInput
             source="childProjects"
-            label="Dự án con"
-            validate={required("Bạn chưa nhập dự án con!")}
+            label="Tiểu dự án"
+            validate={required("Bạn chưa nhập tiểu dự án!")}
           >
             <SimpleFormIterator>
               <TextInput
                 source="name"
-                label="Tên dự án con"
+                label="Tên tiểu dự án"
                 fullWidth
-                validate={required("Bạn chưa nhập tên dự án con!")}
+                validate={required("Bạn chưa nhập tên tiểu dự án!")}
               />
               <ReferenceInput
                 label="Chủ đầu tư"
                 source="investor"
-                reference="account"
+                reference="investor"
                 validate={required("Bạn chưa nhập chủ đầu tư!")}
                 fullWidth
               >
@@ -158,7 +158,7 @@ export const ProjectCreate = (props) => {
           <ReferenceInput
             label="Chủ đầu tư"
             source="investor"
-            reference="account"
+            reference="investor"
             fullWidth
             validate={required("Bạn chưa nhập chủ đầu tư!")}
           >
